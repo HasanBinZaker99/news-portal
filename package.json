@@ -4,7 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "server": "nodemon server.js",
+    "client": "npm run dev --prefix client",
+    "start": "node server.js",
+    "built": "npm run build --prefix client",
+    "dev": "concurrently \" npm run server \" \"npm run client \" "
   },
   "keywords": [],
   "author": "",
@@ -23,7 +27,10 @@
     "mongoose": "^9.2.2"
   },
   "devDependencies": {
+    "autoprefixer": "^10.4.27",
     "concurrently": "^9.2.1",
-    "nodemon": "^3.1.14"
+    "nodemon": "^3.1.14",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^3.4.19"
   }
 }
