@@ -9,8 +9,11 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/login" element={<Login />} />
-        <Route path="/dashboard" element={<MainLayout />} />
-        <Route path="admin" element={<AdminIndex />} />/
+        <Route path="/dashboard" element={<MainLayout />}>
+          <Route path="" element={<Navigate to="/dashboard/admin" />}>
+            <Route path="admin" element={<AdminIndex />} />/
+          </Route>
+        </Route>
       </Routes>
     </BrowserRouter>
   );

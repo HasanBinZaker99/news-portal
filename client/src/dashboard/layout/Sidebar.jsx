@@ -1,7 +1,13 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import { MdDashboard } from "react-icons/md";
+import { BiNews } from "react-icons/bi";
+import { PiUsersFill } from "react-icons/pi";
+import { FaHouseUser } from "react-icons/fa";
+import { IoPersonAdd } from "react-icons/io5";
 
 const Sidebar = () => {
+  const { pathname } = useLocation();
   return (
     <div className="w-[250px] h-screen fixed left-0 bg-[#DADAFF]">
       <div className="h-[70px] flex justify-center items-center">
@@ -13,6 +19,68 @@ const Sidebar = () => {
           />
         </Link>
       </div>
+      <ul className="px-3 flex flex-col gap-y-1 font-medium">
+        <li>
+          <Link
+            to="/dashboard/admin"
+            className={`px-3 ${pathname === "/dashboard/admin" ? "bg-indigo-500 text-white " : "bg-white text-[#404040f6]"} 
+            py-2 hover:shadow-lg hover:shadow-indigo-500/20 w-full rounded-lg flex gap-x-2 justify-start items-center hover:bg-indigo-500 hover:text-white`}
+          >
+            <span className="text-[18px]">
+              <MdDashboard />
+            </span>
+            <span className="">Dashboard</span>
+          </Link>
+        </li>
+        <li>
+          <Link
+            to="/dashboard/news"
+            className={`px-3 ${pathname === "/dashboard/news" ? "bg-indigo-500 text-white " : "bg-white text-[#404040f6]"} 
+            py-2 hover:shadow-lg hover:shadow-indigo-500/20 w-full rounded-lg flex gap-x-2 justify-start items-center hover:bg-indigo-500 hover:text-white`}
+          >
+            <span className="text-[18px]">
+              <BiNews />
+            </span>
+            <span className="">News</span>
+          </Link>
+        </li>
+        <li>
+          <Link
+            to="/dashboard/writer/add"
+            className={`px-3 ${pathname === "/dashboard/writer/add" ? "bg-indigo-500 text-white " : "bg-white text-[#404040f6]"} 
+            py-2 hover:shadow-lg hover:shadow-indigo-500/20 w-full rounded-lg flex gap-x-2 justify-start items-center hover:bg-indigo-500 hover:text-white`}
+          >
+            <span className="text-[18px]">
+              <IoPersonAdd />
+            </span>
+            <span className="">Add Writer</span>
+          </Link>
+        </li>
+        <li>
+          <Link
+            to="/dashboard/writers"
+            className={`px-3 ${pathname === "/dashboard/writers" ? "bg-indigo-500 text-white " : "bg-white text-[#404040f6]"} 
+            py-2 hover:shadow-lg hover:shadow-indigo-500/20 w-full rounded-lg flex gap-x-2 justify-start items-center hover:bg-indigo-500 hover:text-white`}
+          >
+            <span className="text-[18px]">
+              <PiUsersFill />
+            </span>
+            <span className="">Writers</span>
+          </Link>
+        </li>
+        <li>
+          <Link
+            to="/dashboard/profile"
+            className={`px-3 ${pathname === "/dashboard/profile" ? "bg-indigo-500 text-white " : "bg-white text-[#404040f6]"} 
+            py-2 hover:shadow-lg hover:shadow-indigo-500/20 w-full rounded-lg flex gap-x-2 justify-start items-center hover:bg-indigo-500 hover:text-white`}
+          >
+            <span className="text-[18px]">
+              <FaHouseUser />
+            </span>
+            <span className="">Profile</span>
+          </Link>
+        </li>
+      </ul>
     </div>
   );
 };
