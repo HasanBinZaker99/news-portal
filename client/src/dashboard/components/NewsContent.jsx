@@ -1,4 +1,9 @@
 import React from "react";
+import profile from "../../assets/profile.png";
+import { Link } from "react-router-dom";
+import { FaEye } from "react-icons/fa";
+import { FaEdit } from "react-icons/fa";
+import { FaTrashAlt } from "react-icons/fa";
 
 const NewsContent = () => {
   return (
@@ -33,6 +38,51 @@ const NewsContent = () => {
               <th className="py-4 px-6 text-left"> Action </th>
             </tr>
           </thead>
+          <tbody className="text-gray-600">
+            {[1, 2, 3].map((item, index) => (
+              <tr key={index} className="border-t">
+                <td className="py-4 px-6">1 </td>
+                <td className="py-4 px-6"> News Title</td>
+                <td className="py-4 px-6">
+                  <img
+                    className="w-10 h-10 rounded-full object-cover"
+                    src={profile}
+                    alt="news"
+                  />
+                </td>
+                <td className="py-4 px-6"> Category Name</td>
+                <td className="py-4 px-6"> Description </td>
+                <td className="py-4 px-6"> 12-09-2026</td>
+                <td className="py-4 px-6">
+                  <span className="px-3 py-1 bg-green-200 rounded-full text-xs font-semibold">
+                    Active
+                  </span>
+                </td>
+                <td className="py-4 px-6">
+                  <div className="flex gap-3 text-gray-500">
+                    <Link
+                      to="#"
+                      className="p-2 bg-blue-500 text-white rounded hover:bg-blue-800"
+                    >
+                      <FaEye />
+                    </Link>
+                    <Link
+                      to="#"
+                      className="p-2 bg-yellow-500 rounded text-white hover:bg-yellow-800"
+                    >
+                      <FaEdit />
+                    </Link>
+                    <Link
+                      to="#"
+                      className="p-2 bg-red-500 text-white rounded hover:bg-red-800"
+                    >
+                      <FaTrashAlt />
+                    </Link>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
         </table>
       </div>
     </div>
