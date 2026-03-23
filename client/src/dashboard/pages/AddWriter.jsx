@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 const AddWriter = () => {
+  const [loader, setLoader] = useState(false);
   return (
     <div className="bg-white rounded-md">
       <div className="flex justify-between p-4">
@@ -54,6 +55,48 @@ const AddWriter = () => {
                 <option value="Technology"> Technology </option>
               </select>
             </div>
+          </div>
+          <div className="grid grid-cols-2 gap-x-8 mb-3">
+            <div className="flex flex-col gap-y-2">
+              <label
+                htmlFor="email"
+                className="text-md font-semibold text-gray-600"
+              >
+                Email
+              </label>
+              <input
+                required
+                type="email"
+                placeholder="Email"
+                name="email"
+                className="px-3 py-2 rounded-md outline-0 border border-x-gray-300 focus:border-blue-50 h-10"
+                id="email"
+              />
+            </div>
+            <div className="flex flex-col gap-y-2">
+              <label
+                htmlFor="password"
+                className="text-md font-semibold text-gray-600"
+              >
+                Password
+              </label>
+              <input
+                required
+                type="password"
+                placeholder="Password"
+                name="password"
+                className="px-3 py-2 rounded-md outline-0 border border-x-gray-300 focus:border-blue-50 h-10"
+                id="password"
+              />
+            </div>
+          </div>
+          <div className="mt-4">
+            <button
+              disabled={loader}
+              className="px-3 py-[6px] bg-blue-500 rounded-md text-white hover:bg-blue-800"
+            >
+              {loader ? "Loading..." : "Add Writer"}
+            </button>
           </div>
         </form>
       </div>
