@@ -5,6 +5,7 @@ import { BiNews } from "react-icons/bi";
 import { PiUsersFill } from "react-icons/pi";
 import { FaHouseUser } from "react-icons/fa";
 import { IoPersonAdd } from "react-icons/io5";
+import { IoMdAdd } from "react-icons/io";
 
 const Sidebar = () => {
   const { pathname } = useLocation();
@@ -41,7 +42,19 @@ const Sidebar = () => {
             <span className="text-[18px]">
               <BiNews />
             </span>
-            <span className="">News</span>
+            <span className="text-[18px]">News</span>
+          </Link>
+        </li>
+        <li>
+          <Link
+            to="/dashboard/news/create"
+            className={`px-3 ${pathname === "/dashboard/news/create" ? "bg-indigo-500 text-white " : "bg-white text-[#404040f6]"} 
+            py-2 hover:shadow-lg hover:shadow-indigo-500/20 w-full rounded-lg flex gap-x-2 justify-start items-center hover:bg-indigo-500 hover:text-white`}
+          >
+            <span className="text-[18px]">
+              <IoMdAdd />
+            </span>
+            <span className="text-[18px]">AddNews</span>
           </Link>
         </li>
         <li>
@@ -53,7 +66,7 @@ const Sidebar = () => {
             <span className="text-[18px]">
               <IoPersonAdd />
             </span>
-            <span className="">Add Writer</span>
+            <span className="text-[18px]">Add Writer</span>
           </Link>
         </li>
         <li>
@@ -65,7 +78,7 @@ const Sidebar = () => {
             <span className="text-[18px]">
               <PiUsersFill />
             </span>
-            <span className="">Writers</span>
+            <span className="text-[18px]">Writers</span>
           </Link>
         </li>
         <li>
@@ -77,7 +90,7 @@ const Sidebar = () => {
             <span className="text-[18px]">
               <FaHouseUser />
             </span>
-            <span className="">Profile</span>
+            <span className="text-[18px]">Profile</span>
           </Link>
         </li>
       </ul>
