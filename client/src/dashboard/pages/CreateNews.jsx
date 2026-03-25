@@ -3,9 +3,13 @@ import { Link } from "react-router-dom";
 import { FaRegImages } from "react-icons/fa6";
 import { FaImage, FaImages } from "react-icons/fa";
 import JoditEditor from "jodit-react";
+import Gallery from "../components/Gallery";
 
 const CreateNews = () => {
   const [loader, setLoader] = useState(false);
+  const [show, setShow] = useState(false);
+  const [images, setImages] = useState([]);
+
   return (
     <div className="bg-white shadow-md rounded-md p-6">
       <div className="flex justify-between items-center mb-6">
@@ -52,7 +56,11 @@ const CreateNews = () => {
             >
               Description
             </label>
-            <div className="text-blue-500 hover:text-blue-800 cursor-pointer">
+
+            <div
+              onClick={() => setShow(true)}
+              className="text-blue-500 hover:text-blue-800 cursor-pointer"
+            >
               <FaImages className="text-2xl" />
             </div>
           </div>
@@ -68,6 +76,14 @@ const CreateNews = () => {
           </button>
         </div>
       </form>
+      {show && <Gallery setShow={setShow} images={images} />}
+      <input
+        type="file"
+        name="images"
+        id="images"
+        className="hidden"
+        multiple
+      />
     </div>
   );
 };
