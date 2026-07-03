@@ -3,6 +3,22 @@ import profile from "../../assets/profile.png";
 
 const Login = () => {
   const [loader, setLoader] = useState(false);
+  const [state, setState] = useState({
+    email: "",
+    password: "",
+  });
+
+  const inputHandle = (e) => {
+    setState({
+      ...state,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const submit = async (e) => {
+    e.preventDefault();
+    console.log(state);
+  };
 
   return (
     <div className="min-h-screen bg-slate-100 flex items-center justify-center">
@@ -15,7 +31,7 @@ const Login = () => {
               alt="logo"
             />
           </div>
-          <form className="space-y-6">
+          <form onSubmit={submit} className="space-y-6">
             <div>
               <label
                 htmlFor="email"
@@ -25,6 +41,9 @@ const Login = () => {
               </label>
               <input
                 type="email"
+                name="email"
+                value={state.email}
+                onChange={inputHandle}
                 id="email"
                 placeholder="Enter your email"
                 className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 transition"
@@ -39,6 +58,9 @@ const Login = () => {
               </label>
               <input
                 type="password"
+                name="password"
+                value={state.password}
+                onChange={inputHandle}
                 id="password"
                 placeholder="Enter your password"
                 className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 transition"
