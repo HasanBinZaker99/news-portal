@@ -6,6 +6,7 @@ import { PiUsersFill } from "react-icons/pi";
 import { FaHouseUser } from "react-icons/fa";
 import { IoPersonAdd } from "react-icons/io5";
 import { IoMdAdd } from "react-icons/io";
+import logo from "../../assets/logo.png";
 
 const Sidebar = () => {
   const { pathname } = useLocation();
@@ -16,11 +17,7 @@ const Sidebar = () => {
     <div className="w-[250px] h-screen fixed left-0 bg-[#DADAFF]">
       <div className="h-[70px] flex justify-center items-center">
         <Link to="/">
-          <img
-            className="w-[190px] h-[35px]"
-            src="https://i.ibb.co/DfxqrMHr/mainlogo.png"
-            alt=""
-          />
+          <img className="w-[190px] h-[35px]" src={logo} alt="" />
         </Link>
       </div>
       <ul className="px-3 flex flex-col gap-y-1 font-medium">

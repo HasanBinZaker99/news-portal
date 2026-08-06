@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import profile from "../../assets/profile.png";
-
+import logo from "../../assets/logo.png";
 const Login = () => {
   const [loader, setLoader] = useState(false);
   const [state, setState] = useState({
@@ -25,11 +25,7 @@ const Login = () => {
       <div className="bg-white shadow-lg rounded-lg w-[400px]">
         <div className="p-8">
           <div className="flex justify-center mb-8">
-            <img
-              className="w-[150px]"
-              src="https://i.ibb.co/DfxqrMHr/mainlogo.png"
-              alt="logo"
-            />
+            <img className="w-[150px]" src={logo} alt="logo" />
           </div>
           <form onSubmit={submit} className="space-y-6">
             <div>
