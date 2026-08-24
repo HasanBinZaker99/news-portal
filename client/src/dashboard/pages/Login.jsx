@@ -1,12 +1,16 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import profile from "../../assets/profile.png";
 import logo from "../../assets/logo.png";
 import { base_url } from "../../config/config";
 import axios from "axios";
 import toast from "react-hot-toast";
+import storeContext from "../../context/storeContext";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+  const navigate = useNavigate();
   const [loader, setLoader] = useState(false);
+  const { dispatch } = useContext(storeContext);
   const [state, setState] = useState({
     email: "",
     password: "",
@@ -21,14 +25,35 @@ const Login = () => {
 
   const submit = async (e) => {
     e.preventDefault();
+    // e.preventDefault() prevents the browser from refreshing the entire page.
     try {
       const { data } = await axios.post(`${base_url}/api/login`, state);
       setLoader(false);
       //console.log(data);
-      localStorage.setItem("newsToken", data.token);
+      localStorage.setItem("newsToken", data);
       toast.success(data.message);
+      /* dispatch() is a function used to send an action to the reducer. The reducer then decides how the state should change.
+      You can think of dispatch like a messenger.
+      Suppose:
+      Login.jsx = receptionist
+      dispatch = messenger
+      storeReducer.js = manager
+      global state = company record book
+      After login is successful, Login.jsx does not directly change the global state.
+      Instead, it tells dispatch:
+      "Go tell the reducer that login succeeded."
+      */
+      dispatch({
+        type: "login_success",
+        payload: {
+          token: data.token,
+        },
+      });
+
+      //navigate("/dashboard");
     } catch (error) {
-      console.log(error);
+      setLoader(false);
+      toast.error(error.response.data.message);
     }
   };
 

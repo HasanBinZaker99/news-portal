@@ -1,17 +1,20 @@
 import React, { useReducer } from "react";
 import storeReducer from "./storeReducer";
-import storeContext from "./storeContext";
+import StoreContext from "./storeContext";
+import decode_token from "../utils";
 
-const storeProvider = ({ children }) => {
+// React component names should start with a capital letter
+const StoreProvider = ({ children }) => {
   const [store, dispatch] = useReducer(storeReducer, {
-    userInfo: "",
-    token: "",
+    userInfo: decode_token(localStorage.getItem("newsToken")),
+    token: localStorage.getItem("newsToken") || "",
   });
+  //console.log("StoreUserInfo", store.token);
   return (
-    <storeContext.Provider value={{ store, dispatch }}>
+    <StoreContext.Provider value={{ store, dispatch }}>
       {children}
-    </storeContext.Provider>
+    </StoreContext.Provider>
   );
 };
 
-export default storeProvider;
+export default StoreProvider;
