@@ -1,18 +1,23 @@
 import React, { useContext } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { MdDashboard } from "react-icons/md";
 import { BiNews } from "react-icons/bi";
 import { PiUsersFill } from "react-icons/pi";
 import { FaHouseUser } from "react-icons/fa";
 import { IoPersonAdd } from "react-icons/io5";
-import { IoMdAdd } from "react-icons/io";
+import { IoMdAdd, IoMdLogOut } from "react-icons/io";
 import logo from "../../assets/logo.png";
 import StoreContext from "../../context/storeContext";
 
 const Sidebar = () => {
   const { pathname } = useLocation();
-  const { store } = useContext(StoreContext);
-
+  const { store, dispatch } = useContext(StoreContext);
+  const navigate = useNavigate();
+  const logout = () => {
+    localStorage.removeItem("newsToken");
+    dispatch({ type: "logout", payload: "" });
+    navigate("/login");
+  };
   return (
     <div className="w-[250px] h-screen fixed left-0 bg-[#DADAFF]">
       <div className="h-[70px] flex justify-center items-center">
@@ -113,6 +118,18 @@ const Sidebar = () => {
             </span>
             <span className="text-[18px]">Profile</span>
           </Link>
+        </li>
+
+        <li>
+          <div
+            onClick={logout}
+            className={`px-3 bg-white text-[#404040f6] py-2 hover:shadow-lg hover:shadow-indigo-500/20 w-full rounded-lg flex gap-x-2 justify-start items-center hover:bg-indigo-500 hover:text-white`}
+          >
+            <span className="text-[18px]">
+              <IoMdLogOut />
+            </span>
+            <span className="text-[18px]">Logout</span>
+          </div>
         </li>
       </ul>
     </div>
