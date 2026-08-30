@@ -11,11 +11,11 @@ import AddWriter from "./dashboard/pages/AddWriter";
 import Writers from "./dashboard/pages/Writers";
 import CreateNews from "./dashboard/pages/CreateNews";
 import WriterIndex from "./dashboard/pages/writerIndex";
+import { useContext } from "react";
+import StoreContext from "./context/storeContext";
 
 function App() {
-  const userInfo = {
-    role: "writer",
-  };
+  const { store } = useContext(StoreContext);
 
   return (
     <BrowserRouter>
@@ -26,7 +26,7 @@ function App() {
             <Route
               path=""
               element={
-                userInfo.role === "admin" ? (
+                store.userInfo.role === "admin" ? (
                   <Navigate to="/dashboard/admin" />
                 ) : (
                   <Navigate to="/dashboard/writer" />

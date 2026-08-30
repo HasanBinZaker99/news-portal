@@ -50,7 +50,7 @@ const Login = () => {
         },
       });
 
-      //navigate("/dashboard");
+      navigate("/dashboard");
     } catch (error) {
       setLoader(false);
       toast.error(error.response.data.message);
