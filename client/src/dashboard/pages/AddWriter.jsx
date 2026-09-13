@@ -16,7 +16,7 @@ const AddWriter = () => {
     password: "",
     category: "",
   });
-  console.log(state);
+
   const inputHandle = (e) => {
     setState({
       ...state,
