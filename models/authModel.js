@@ -33,4 +33,4 @@ const authSchema = new Schema(
   },
 );
 
-module.exports = model("authors", authSchema);
+module.exports = model("users", authSchema);
