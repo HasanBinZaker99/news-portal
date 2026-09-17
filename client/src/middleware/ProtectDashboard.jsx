@@ -4,7 +4,6 @@ import StoreContext from "../context/storeContext";
 
 const ProtectDashboard = () => {
   const { store } = useContext(StoreContext);
-  console.log("store", store);
 
   if (store.userInfo) {
     return <Outlet />;

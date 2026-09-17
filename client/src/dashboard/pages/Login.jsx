@@ -30,7 +30,7 @@ const Login = () => {
       const { data } = await axios.post(`${base_url}/api/login`, state);
       setLoader(false);
       //console.log(data);
-      localStorage.setItem("newsToken", data);
+      localStorage.setItem("newsToken", data.token);
       toast.success(data.message);
       /* dispatch() is a function used to send an action to the reducer. The reducer then decides how the state should change.
       You can think of dispatch like a messenger.
@@ -53,7 +53,10 @@ const Login = () => {
       navigate("/dashboard");
     } catch (error) {
       setLoader(false);
-      toast.error(error.response.data.message);
+      toast.error(
+        error.response?.data?.message ||
+          "Login failed. Check that the backend server is running.",
+      );
     }
   };
 
