@@ -15,5 +15,10 @@ router.get(
   middleware.role,
   authController.get_writers,
 );
-
+router.get(
+  "/api/news/writer/:id",
+  middleware.auth,
+  middleware.role,
+  authController.getWriterById,
+);
 module.exports = router;

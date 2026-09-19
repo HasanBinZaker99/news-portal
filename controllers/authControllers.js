@@ -84,6 +84,8 @@ class authController {
       return res.status(500).json({ message: "Internal server error" });
     }
   };
+
+  getWriterById = async (req, res) => {};
 }
 
 module.exports = new authController();
