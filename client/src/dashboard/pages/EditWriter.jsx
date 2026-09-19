@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { base_url } from "../../config/config";
 import toast from "react-hot-toast";
@@ -31,10 +31,16 @@ const EditWriter = () => {
         category: data.writer.category,
         role: data.writer.role,
       });
+      console.log("dataWriter", data);
     } catch (error) {
       toast.error("Failed to load writer Data");
     }
   };
+
+  useEffect(() => {
+    getWriterData();
+  }, [id]);
+
   const inputHandle = (e) => {
     setState({
       ...state,
@@ -138,7 +144,7 @@ Email"
               />
             </div>
           </div>
-          <div lassName="mt-4">
+          <div className="mt-4">
             <button
               disabled={loader}
               className="px-3 py-[6px] bg-blue-500 rounded-md text-white hover:bg-blue-800"
