@@ -31,7 +31,6 @@ const EditWriter = () => {
         category: data.writer.category,
         role: data.writer.role,
       });
-      console.log("dataWriter", data);
     } catch (error) {
       toast.error("Failed to load writer Data");
     }
@@ -47,6 +46,24 @@ const EditWriter = () => {
       [e.target.name]: e.target.value,
     });
   };
+  const handleUpdateWriter = async (e) => {
+    e.preventDefault();
+    try {
+      setLoader(true);
+      await axios.put(`${base_url}/api/update/writer/${id}`, state, {
+        headers: {
+          Authorization: `Bearer ${store.token}`,
+        },
+      });
+      setLoader(false);
+      toast.success("Writer Update success");
+      navigate("/dashboard/writers");
+    } catch (error) {
+      setLoader(false);
+      toast.error(error.response.data.message);
+    }
+  };
+
   return (
     <div className="bg-white rounded-md">
       <div className="flex justify-between p-4">
@@ -59,7 +76,7 @@ const EditWriter = () => {
         </Link>
       </div>
       <div className="p-4">
-        <form>
+        <form onSubmit={handleUpdateWriter}>
           <div className="grid grid-cols-2 gap-x-8 mb-3">
             <div className="flex flex-col gap-y-2">
               <label

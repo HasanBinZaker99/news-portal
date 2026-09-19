@@ -97,6 +97,32 @@ class authController {
       return res.status(500).json({ message: "Internal server error" });
     }
   };
+  update_writer = async (req, res) => {
+    //console.log(req.body);
+    const { name, email, category, role } = req.body;
+    const writerId = req.params.id;
+
+    if (!name || !email || !category) {
+      return res.status(400).json({ message: "Please provide all field data" });
+    }
+    try {
+      const writer = await authModel.findById(writerId);
+      if (!writer) {
+        return res.status(404).json({ message: "Writer not found" });
+      }
+      writer.name = name.trim();
+      writer.email = email.trim();
+      writer.category = category.trim();
+      writer.role = role.trim();
+
+      await writer.save();
+      return res
+        .status(200)
+        .json({ message: "Writer updated successfully", writer });
+    } catch (error) {
+      return res.status(500).json({ message: "Internal server error" });
+    }
+  };
 }
 
 module.exports = new authController();

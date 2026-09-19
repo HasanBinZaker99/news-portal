@@ -21,4 +21,10 @@ router.get(
   middleware.role,
   authController.getWriterById,
 );
+router.put(
+  "/api/update/writer/:id",
+  middleware.auth,
+  middleware.role,
+  authController.update_writer,
+);
 module.exports = router;
