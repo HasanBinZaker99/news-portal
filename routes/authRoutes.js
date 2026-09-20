@@ -27,4 +27,12 @@ router.put(
   middleware.role,
   authController.update_writer,
 );
+
+router.delete(
+  "/api/delete/writer/:id",
+  middleware.auth,
+  middleware.role,
+  authController.delete_writer,
+);
+
 module.exports = router;

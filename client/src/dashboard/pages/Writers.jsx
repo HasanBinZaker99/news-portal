@@ -7,10 +7,12 @@ import profile from "../../assets/profile.png";
 import axios from "axios";
 import StoreContext from "../../context/storeContext";
 import { base_url } from "../../config/config";
+import toast from "react-hot-toast";
 
 const Writers = () => {
   const { store } = useContext(StoreContext);
   const [writers, setWriters] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const get_writers = async () => {
     try {
@@ -27,6 +29,22 @@ const Writers = () => {
   useEffect(() => {
     get_writers();
   }, []);
+
+  const handleDeleteWriter = async (id) => {
+    if (!window.confirm("Are you sure to delete writer?")) return;
+    setLoading(true);
+    try {
+      await axios.delete(`${base_url}/api/delete/writer/${id}`, {
+        headers: {
+          Authorization: `Bearer ${store.token}`,
+        },
+      });
+      toast.success("Writer deleted successfully");
+      get_writers();
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <div className="bg-white rounded-lg shadow-md">
       <div className="flex justify-between items-center px-6 py-4 border-b border-gray-400">
@@ -77,12 +95,12 @@ const Writers = () => {
                     >
                       <FaEdit />
                     </Link>
-                    <Link
-                      to="#"
+                    <button
+                      onClick={() => handleDeleteWriter(item._id)}
                       className="p-2 bg-red-500 text-white rounded hover:bg-red-800"
                     >
                       <FaTrashAlt />
-                    </Link>
+                    </button>
                   </div>
                 </td>
               </tr>
