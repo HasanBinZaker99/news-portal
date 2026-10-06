@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { FaRegImages } from "react-icons/fa6";
 import { FaImage, FaImages } from "react-icons/fa";
@@ -9,6 +9,20 @@ const CreateNews = () => {
   const [loader, setLoader] = useState(false);
   const [show, setShow] = useState(false);
   const [images, setImages] = useState([]);
+
+  const editor = useRef(null);
+  const [title, setTitle] = useState("");
+  const [image, setImage] = useState("");
+  const [img, setImg] = useState("");
+  const [description, setDescription] = useState("");
+
+  const imageHandle = (e) => {
+    const { files } = e.target;
+    if (files.length > 0) {
+      setImg(URL.createObjectURL(files[0]));
+      setImage(files[0]);
+    }
+  };
 
   return (
     <div className="bg-white shadow-md rounded-md p-6">
@@ -30,6 +44,8 @@ const CreateNews = () => {
             Title
           </label>
           <input
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
             type="text"
             placeholder="Enter news title"
             name="title"
@@ -43,10 +59,22 @@ const CreateNews = () => {
             htmlFor="img"
             className="mt-4 w-full h-[240px] flex flex-col items-center justify-center cursor-pointer border-2 border-dashed border-gray-500 rounded-lg text-gray-500 hover:border-blue-500 transition"
           >
-            <FaRegImages className="text-4xl mb-2 " />
-            <span className="font-medium">Select Image</span>
+            {img ? (
+              <img src={img} className="w-full h-full" lt="image " />
+            ) : (
+              <div className="flex justify-center items-center flex-col gap-y-2">
+                <FaRegImages className="text-4xl mb-2 " />
+                <span className="font-medium">Select Image</span>
+              </div>
+            )}
           </label>
-          <input type="file" className="hidden" id="img" required />
+          <input
+            onChange={imageHandle}
+            type="file"
+            className="hidden"
+            id="img"
+            required
+          />
         </div>
         <div>
           <div className="flex justify-between items-center mb-2 mt-4">
@@ -64,7 +92,14 @@ const CreateNews = () => {
               <FaImages className="text-2xl" />
             </div>
           </div>
-          <JoditEditor className="w-full border border-gray-400 rounded-md" />
+          <JoditEditor
+            ref={editor}
+            value={description}
+            tabIndex={1}
+            onBlur={(value) => setDescription(value)}
+            onChange={() => {}}
+            className="w-full border border-gray-400 rounded-md"
+          />
         </div>
         <div className="mt-4">
           <button
