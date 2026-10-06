@@ -1,11 +1,17 @@
-import React, { useRef, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
+import axios from "axios";
 import { Link } from "react-router-dom";
 import { FaRegImages } from "react-icons/fa6";
 import { FaImage, FaImages } from "react-icons/fa";
 import JoditEditor from "jodit-react";
 import Gallery from "../components/Gallery";
 
+import { base_url } from "../../config/config";
+import toast from "react-hot-toast";
+import StoreContext from "../../context/storeContext";
+
 const CreateNews = () => {
+  const { store } = useContext(StoreContext);
   const [loader, setLoader] = useState(false);
   const [show, setShow] = useState(false);
   const [images, setImages] = useState([]);
@@ -24,6 +30,28 @@ const CreateNews = () => {
     }
   };
 
+  const added = async (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("description", description);
+    formData.append("image", image);
+
+    try {
+      setLoader(true);
+      const { data } = await axios.post(`${base_url}/api/news/add`, formData, {
+        headers: {
+          Authorization: `Bearer ${store.token}`,
+        },
+      });
+      setLoader(false);
+      toast.success(data.message);
+    } catch (error) {
+      setLoader(false);
+      toast.error(error.response.data.message);
+    }
+  };
+
   return (
     <div className="bg-white shadow-md rounded-md p-6">
       <div className="flex justify-between items-center mb-6">
@@ -35,7 +63,7 @@ const CreateNews = () => {
           View All
         </Link>
       </div>
-      <form>
+      <form onSubmit={added}>
         <div>
           <label
             htmlFor="title"
