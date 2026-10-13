@@ -7,6 +7,8 @@ const cloudinary = require("cloudinary").v2;
   Cloudinary provides tools for uploading, storing, and transforming images and videos. Its documentation recommends using this v2 interface.
   */
 const newsModel = require("../models/newsModel");
+const galleryModel = require("../models/galleryModel");
+
 const {
   mongo: { ObjectId },
 } = require("mongoose");
@@ -54,7 +56,64 @@ class newsControllers {
       });
       return res.status(201).json({ message: "News added successfully", news });
     } catch (error) {
-      console.log(error);
+      //console.log(error);
+      return res.status(500).json({ message: "Internal server error" });
+    }
+  };
+  // End Method
+
+  get_images = async (req, res) => {
+    const { id } = req.userInfo;
+    try {
+      const images = await galleryModel
+        .find({ writerId: new ObjectId(id) })
+        .sort({ createdAt: -1 });
+      return res.status(200).json({ images });
+    } catch (error) {
+      return res.status(500).json({ message: "Internal server error" });
+    }
+  };
+  // End method
+
+  add_images = async (req, res) => {
+    const { id } = req.userInfo;
+    const form = formidable({});
+
+    cloudinary.config({
+      cloud_name: process.env.cloud_name,
+      api_key: process.env.api_key,
+      api_secret: process.env.api_secret,
+      secure: true,
+    });
+    try {
+      const [_, files] = await form.parse(req);
+      /**
+       _ is a normal variable name that programmers often use to mean “this value is not needed.”
+       form.parse(req) return two values: [fields, files]
+       So your line:
+       const [_, files] = await form.parse(req);
+
+      assigns them like this:
+      Variable	Receives
+      _	Text fields, such as title or description
+      files	Information about uploaded files
+
+      The text fields are still stored in _, but your code does not use them. You only need files here. 
+       */
+      let allImages = [];
+      const { images } = files;
+
+      for (let i = 0; i < images.length; i++) {
+        const { url } = await cloudinary.uploader.upload(images[i].filepath, {
+          folder: "news_images",
+        });
+        allImages.push({ writerId: id, url });
+      }
+      const image = await galleryModel.insertMany(allImages);
+      return res
+        .status(201)
+        .json({ images: image, message: "Images uploaded successfully!" });
+    } catch (error) {
       return res.status(500).json({ message: "Internal server error" });
     }
   };

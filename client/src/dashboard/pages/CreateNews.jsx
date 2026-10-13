@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from "react";
+import React, { useContext, useRef, useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { FaRegImages } from "react-icons/fa6";
@@ -14,7 +14,6 @@ const CreateNews = () => {
   const { store } = useContext(StoreContext);
   const [loader, setLoader] = useState(false);
   const [show, setShow] = useState(false);
-  const [images, setImages] = useState([]);
 
   const editor = useRef(null);
   const [title, setTitle] = useState("");
@@ -53,6 +52,57 @@ const CreateNews = () => {
     } catch (error) {
       setLoader(false);
       toast.error(error.response.data.message);
+    }
+  };
+
+  const [images, setImages] = useState([]);
+
+  const get_images = async () => {
+    try {
+      const { data } = await axios.get(`${base_url}/api/images`, {
+        headers: {
+          Authorization: `Bearer ${store.token}`,
+        },
+      });
+      console.log(data.images);
+      setImages(data.images);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    if (store.token) {
+      get_images();
+    }
+  }, [store.token]);
+
+  const [imagesLoader, setImagesLoader] = useState(false);
+  const imageHandler = async (e) => {
+    const files = e.target.files;
+    try {
+      const formData = new FormData();
+      for (let i = 0; i < files.length; i++) {
+        formData.append("images", files[i]);
+      }
+      setImagesLoader(true);
+      const { data } = await axios.post(
+        `${base_url}/api/images/add`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${store.token}`,
+          },
+        },
+      );
+      setImagesLoader(false);
+      get_images();
+
+      //setImages([...images, data.images]);
+
+      toast.success(data.message);
+    } catch (error) {
+      console.log(error);
+      setImagesLoader(false);
     }
   };
 
@@ -145,11 +195,11 @@ const CreateNews = () => {
       </form>
       {show && <Gallery setShow={setShow} images={images} />}
       <input
+        onChange={imageHandler}
         type="file"
-        name="images"
+        multiple
         id="images"
         className="hidden"
-        multiple
       />
     </div>
   );
