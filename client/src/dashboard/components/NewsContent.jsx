@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import profile from "../../assets/profile.png";
 import { Link } from "react-router-dom";
 import { FaEye } from "react-icons/fa";
@@ -6,8 +6,33 @@ import { FaEdit } from "react-icons/fa";
 import { FaTrashAlt } from "react-icons/fa";
 import { IoIosArrowBack } from "react-icons/io";
 import { IoIosArrowForward } from "react-icons/io";
+import StoreContext from "../../context/storeContext";
+import { base_url } from "../../config/config";
+import axios from "axios";
+import { convert } from "html-to-text";
 
 const NewsContent = () => {
+  const { store } = useContext(StoreContext);
+  const [news, setNews] = useState([]);
+  const [all_news, set_all_news] = useState([]);
+  console.log(news);
+  const get_news = async () => {
+    try {
+      const { data } = await axios.get(`${base_url}/api/news`, {
+        headers: {
+          Authorization: `Bearer ${store.token}`,
+        },
+      });
+      set_all_news(data.news);
+      setNews(data.news);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    get_news();
+  }, []);
+
   return (
     <div className="bg-gray-50 min-h-screen p-6">
       <div className="flex items-center gap-4 mb-6">
@@ -41,23 +66,26 @@ const NewsContent = () => {
             </tr>
           </thead>
           <tbody className="text-gray-600">
-            {[1, 2, 3].map((item, index) => (
-              <tr key={index} className="border-t">
-                <td className="py-4 px-6">1 </td>
-                <td className="py-4 px-6"> News Title</td>
+            {news.map((n, i) => (
+              <tr key={i} className="border-t">
+                <td className="py-4 px-6">{i + 1} </td>
+                <td className="py-4 px-6"> {n.title.slice(0, 15)}...</td>
                 <td className="py-4 px-6">
                   <img
                     className="w-10 h-10 rounded-full object-cover"
-                    src={profile}
+                    src={n.image}
                     alt="news"
                   />
                 </td>
-                <td className="py-4 px-6"> Category Name</td>
-                <td className="py-4 px-6"> Description </td>
-                <td className="py-4 px-6"> 12-09-2026</td>
+                <td className="py-4 px-6"> {n.category}</td>
+                <td className="py-4 px-6">
+                  {" "}
+                  {convert(n.description).slice(0, 15)}...
+                </td>
+                <td className="py-4 px-6"> {n.date}</td>
                 <td className="py-4 px-6">
                   <span className="px-3 py-1 bg-green-200 rounded-full text-xs font-semibold">
-                    Active
+                    {n.status}
                   </span>
                 </td>
                 <td className="py-4 px-6">

@@ -96,9 +96,6 @@ const CreateNews = () => {
       );
       setImagesLoader(false);
       get_images();
-
-      //setImages([...images, data.images]);
-
       toast.success(data.message);
     } catch (error) {
       console.log(error);

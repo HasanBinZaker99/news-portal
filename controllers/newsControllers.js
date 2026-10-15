@@ -117,6 +117,23 @@ class newsControllers {
       return res.status(500).json({ message: "Internal server error" });
     }
   };
+  //End method
+  get_dashboard_news = async (req, res) => {
+    const { id, role } = req.userInfo;
+    try {
+      if (role === "admin") {
+        const news = await newsModel.find({}).sort({ createdAt: -1 });
+        return res.status(200).json({ news });
+      } else {
+        const news = await newsModel
+          .find({ writerId: new ObjectId(id) })
+          .sort({ createdAt: -1 });
+        return res.status(200).json({ news });
+      }
+    } catch (error) {
+      return res.status(500).json({ message: "Internal server error" });
+    }
+  };
 }
 
 module.exports = new newsControllers();
