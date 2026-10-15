@@ -7,6 +7,7 @@
 notes.md
 # Dependencies
 node_modules/
+client/node_modules/
 
 # macOS
 .DS_Store
