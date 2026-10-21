@@ -64,7 +64,7 @@ const CreateNews = () => {
           Authorization: `Bearer ${store.token}`,
         },
       });
-      console.log(data.images);
+      // console.log(data.images);
       setImages(data.images);
     } catch (error) {
       console.log(error);

@@ -14,6 +14,7 @@ import WriterIndex from "./dashboard/pages/writerIndex";
 import { useContext } from "react";
 import StoreContext from "./context/storeContext";
 import EditWriter from "./dashboard/pages/EditWriter";
+import EditNews from "./dashboard/pages/EditNews";
 
 function App() {
   const { store } = useContext(StoreContext);
@@ -49,6 +50,7 @@ function App() {
             <Route path="" element={<ProtectRole role="writer" />}>
               <Route path="writer" element={<WriterIndex />} />
               <Route path="news/create" element={<CreateNews />} />
+              <Route path="news/edit/:news_id" element={<EditNews />} />
             </Route>
           </Route>
         </Route>

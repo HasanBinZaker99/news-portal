@@ -15,7 +15,7 @@ const NewsContent = () => {
   const { store } = useContext(StoreContext);
   const [news, setNews] = useState([]);
   const [all_news, set_all_news] = useState([]);
-  console.log(news);
+  //console.log(news);
   const get_news = async () => {
     try {
       const { data } = await axios.get(`${base_url}/api/news`, {
@@ -96,12 +96,17 @@ const NewsContent = () => {
                     >
                       <FaEye />
                     </Link>
-                    <Link
-                      to="#"
-                      className="p-2 bg-yellow-500 rounded text-white hover:bg-yellow-800"
-                    >
-                      <FaEdit />
-                    </Link>
+                    {store?.userInfo?.role === "writer" && (
+                      <>
+                        <Link
+                          to={`/dashboard/news/edit/${n._id}`}
+                          className="p-2 bg-yellow-500 rounded text-white hover:bg-yellow-800"
+                        >
+                          <FaEdit />
+                        </Link>
+                      </>
+                    )}
+
                     <Link
                       to="#"
                       className="p-2 bg-red-500 text-white rounded hover:bg-red-800"
