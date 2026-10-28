@@ -10,7 +10,7 @@ import StoreContext from "../../context/storeContext";
 import { base_url } from "../../config/config";
 import axios from "axios";
 import { convert } from "html-to-text";
-
+import { toast } from "react-hot-toast";
 const NewsContent = () => {
   const { store } = useContext(StoreContext);
   const [news, setNews] = useState([]);
@@ -18,6 +18,10 @@ const NewsContent = () => {
   //console.log(news);
   const get_news = async () => {
     try {
+      /**
+      const response = await axios.get(...)	The entire response object
+      const { data } = await axios.get(...)	Only the response’s data property
+       */
       const { data } = await axios.get(`${base_url}/api/news`, {
         headers: {
           Authorization: `Bearer ${store.token}`,
@@ -33,6 +37,24 @@ const NewsContent = () => {
     get_news();
   }, []);
 
+  const deleteNews = async (newsId) => {
+    if (window.confirm("Are you sure to delete?")) {
+      try {
+        const { data } = await axios.delete(
+          `${base_url}/api/news/delete/${newsId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${store.token}`,
+            },
+          },
+        );
+        toast.success(data.message);
+        get_news();
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
   return (
     <div className="bg-gray-50 min-h-screen p-6">
       <div className="flex items-center gap-4 mb-6">
@@ -107,12 +129,13 @@ const NewsContent = () => {
                       </>
                     )}
 
-                    <Link
+                    <button
+                      onClick={() => deleteNews(n._id)}
                       to="#"
                       className="p-2 bg-red-500 text-white rounded hover:bg-red-800"
                     >
                       <FaTrashAlt />
-                    </Link>
+                    </button>
                   </div>
                 </td>
               </tr>
