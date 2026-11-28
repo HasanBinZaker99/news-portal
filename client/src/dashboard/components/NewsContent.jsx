@@ -11,6 +11,7 @@ import { base_url } from "../../config/config";
 import axios from "axios";
 import { convert } from "html-to-text";
 import { toast } from "react-hot-toast";
+
 const NewsContent = () => {
   const { store } = useContext(StoreContext);
   const [news, setNews] = useState([]);
@@ -22,10 +23,6 @@ const NewsContent = () => {
 
   const get_news = async () => {
     try {
-      /**
-      const response = await axios.get(...)	The entire response object
-      const { data } = await axios.get(...)	Only the response’s data property
-       */
       const { data } = await axios.get(`${base_url}/api/news`, {
         headers: {
           Authorization: `Bearer ${store.token}`,
@@ -76,6 +73,49 @@ const NewsContent = () => {
       setPerPage(5);
     }
   };
+
+  const search_news = (e) => {
+    const tempNews = all_news.filter(
+      (n) => n.title.toLowerCase().indexOf(e.target.value.toLowerCase()) > -1,
+    );
+    setNews(tempNews);
+    setPage(1);
+    setPerPage(5);
+  };
+  const [res, set_res] = useState({
+    id: "",
+    loader: false,
+  });
+
+  const update_status = async (status, news_id) => {
+    try {
+      set_res({
+        id: news_id,
+        loader: true,
+      });
+      const { data } = await axios.put(
+        `${base_url}/api/news/status-update/${news_id}`,
+        { status },
+        {
+          headers: {
+            Authorization: `Bearer ${store.token}`,
+          },
+        },
+      );
+      set_res({
+        id: news_id,
+        loader: false,
+      });
+      toast.success(data.message);
+      get_news();
+    } catch (error) {
+      set_res({
+        id: "",
+        loader: false,
+      });
+      console.log(error);
+    }
+  };
   return (
     <div className="bg-gray-50 min-h-screen p-6">
       <div className="flex items-center gap-4 mb-6">
@@ -90,6 +130,7 @@ const NewsContent = () => {
           <option value="deactive"> Deactive </option>
         </select>
         <input
+          onChange={search_news}
           type="text"
           placeholder="Search News"
           className="w-full px-4 py-2 rounded-md border border-gray-300 focus:ring-2 focus:ring-blue-400 focus:outline-none"
@@ -111,7 +152,7 @@ const NewsContent = () => {
           </thead>
           <tbody className="text-gray-600">
             {/*
-       🧩 news.slice(start, end)
+       news.slice(start, end)
       slice(start, end) returns a new array containing items from index start up to but not including end.
 
       The two arguments:
@@ -128,7 +169,7 @@ const NewsContent = () => {
       3	(3-1)*5 = 10	10	15	[10,11,12,13,14]
       4	(4-1)*5 = 15	15	20	[15,16,17,18,19]
       5	(5-1)*5 = 20	20	25	[20,21,22] ← only 3 left
-      Notice end for page 5 is 25, but the array only has 23 items. slice doesn't throw — it silently caps at news.length. So you get exactly the 3 remaining items. ✅
+      Notice end for page 5 is 25, but the array only has 23 items. slice doesn't throw — it silently caps at news.length. So you get exactly the 3 remaining items. 
 
       Full trace with news = [n0, n1, … n22] (23 items), perPage = 5
       js
@@ -146,7 +187,7 @@ const NewsContent = () => {
       news.slice(40, 45)  // → []   (no items at those indices)
       slice returns an empty array — no error. That's why you also want the "clamp" useEffect from before, to stop the user landing on a page that doesn't exist.
 
-      🧩 Piece 3: .map((n, i) => ...)
+     Piece 3: .map((n, i) => ...)
       map loops over only the sliced items (max perPage of them) and returns a <tr> for each.
 
       n = the news item object (e.g. { _id, title, image, status, … })
@@ -172,11 +213,72 @@ const NewsContent = () => {
                     {convert(n.description).slice(0, 15)}...
                   </td>
                   <td className="py-4 px-6"> {n.date}</td>
-                  <td className="py-4 px-6">
-                    <span className="px-3 py-1 bg-green-200 rounded-full text-xs font-semibold">
-                      {n.status}
-                    </span>
-                  </td>
+                  {store?.userInfo?.role === "admin" ? (
+                    <td className="py-4 px-6">
+                      {n.status === "pending" && (
+                        <span
+                          onClick={() => update_status("active", n._id)}
+                          className="px-2 py-[2px] bg-blue-200 text-blue-800  rounded-md text-xs cursor-pointer "
+                        >
+                          {res.loader && res.id === n._id
+                            ? "Loading...."
+                            : n.status}
+                        </span>
+                      )}
+                      {n.status === "active" && (
+                        <span
+                          onClick={() => update_status("deactive", n._id)}
+                          className="px-2 py-[2px] bg-green-200 text-green-800  rounded-md text-xs cursor-pointer "
+                        >
+                          {res.loader && res.id === n._id
+                            ? "Loading...."
+                            : n.status}
+                        </span>
+                      )}
+                      {n.status === "deactive" && (
+                        <span
+                          onClick={() => update_status("active", n._id)}
+                          className="px-2 py-[2px] bg-red-200 text-red-800  rounded-md text-xs cursor-pointer "
+                        >
+                          {res.loader && res.id === n._id
+                            ? "Loading...."
+                            : n.status}
+                        </span>
+                      )}
+                    </td>
+                  ) : (
+                    <td className="py-4 px-6">
+                      {n.status === "pending" && (
+                        <span
+                          onClick={() => update_status("active", n._id)}
+                          className="px-2 py-[2px] bg-blue-200 text-blue-800  rounded-md text-xs  "
+                        >
+                          {n.status}
+                        </span>
+                      )}
+                      {n.status === "active" && (
+                        <span
+                          onClick={() => update_status("deactive", n._id)}
+                          className="px-2 py-[2px] bg-green-200 text-green-800  rounded-md text-xs cursor-pointer "
+                        >
+                          {res.loader && res.id === n._id
+                            ? "Loading...."
+                            : n.status}
+                        </span>
+                      )}
+                      {n.status === "deactive" && (
+                        <span
+                          onClick={() => update_status("active", n._id)}
+                          className="px-2 py-[2px] bg-red-200 text-red-800  rounded-md text-xs cursor-pointer "
+                        >
+                          {res.loader && res.id === n._id
+                            ? "Loading...."
+                            : n.status}
+                        </span>
+                      )}
+                    </td>
+                  )}
+
                   <td className="py-4 px-6">
                     <div className="flex gap-3 text-gray-500">
                       <Link
@@ -232,6 +334,9 @@ const NewsContent = () => {
             className="px-4 py-2 rounded-md border border-gray-300 focus:ring-2 focus:ring-blue-400 focus:outline-none"
           >
             <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="15">15</option>
+            <option value="20">20</option>
           </select>
         </div>
         <div className="flex items-center gap-4 text-sm text-gray-600">

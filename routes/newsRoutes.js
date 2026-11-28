@@ -23,5 +23,9 @@ router.delete(
   middleware.auth,
   newsControllers.delete_news,
 );
-
+router.put(
+  "/api/news/status-update/:news_id",
+  middleware.auth,
+  newsControllers.update_news_status,
+);
 module.exports = router;
